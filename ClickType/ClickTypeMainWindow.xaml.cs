@@ -24,5 +24,9 @@ namespace ClickType
         {
             InitializeComponent();
         }
+
+        private void SnippetsListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+        }
     }
 }
