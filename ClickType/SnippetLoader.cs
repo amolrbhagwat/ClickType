@@ -8,5 +8,10 @@ namespace ClickType
 {
     class SnippetLoader
     {
+        public static List<Snippet> LoadSnippets()
+        {
+            List<Snippet> snippets = new List<Snippet>();
+            return snippets;
+        }
     }
 }
