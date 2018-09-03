@@ -44,6 +44,9 @@ namespace ClickType
 
         private void SnippetsListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            ListBoxItem listBoxItem = (ListBoxItem)sender;
+
+            ((ClickTypeViewModel)this.DataContext).TypeSnippet(listBoxItem.DataContext as Snippet);
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

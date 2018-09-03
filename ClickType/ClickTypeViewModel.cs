@@ -30,6 +30,11 @@ namespace ClickType
             Snippets = SnippetLoader.LoadSnippets();
         }
 
+        public void TypeSnippet(Snippet snippet)
+        {
+            SnippetTyper.Type(snippet);
+        }
+
         protected void RaisePropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
