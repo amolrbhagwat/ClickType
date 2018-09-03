@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClickType"
         mc:Ignorable="d"
+        Topmost="True"
+        SourceInitialized="Window_SourceInitialized"
         Title="ClickType">
     <Window.DataContext>
         <local:ClickTypeViewModel/>
