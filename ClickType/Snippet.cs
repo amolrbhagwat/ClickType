@@ -8,20 +8,27 @@ namespace ClickType
 {
     class Snippet
     {
-        public string Text
+        private readonly long id;
+
+        public string SnippetText
         {
             get;
             private set;
         }
 
-        public Snippet(string text)
+        public Snippet()
         {
-            Text = text;
         }
 
+        public Snippet(long id, string text)
+        {
+            this.id = id;
+            SnippetText = text;
+        }
+               
         public override string ToString()
         {
-            return Text;
+            return SnippetText;
         }
     }
 }
