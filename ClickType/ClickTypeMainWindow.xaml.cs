@@ -51,15 +51,33 @@ namespace ClickType
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            WindowInteropHelper interopHelper = new WindowInteropHelper(this);
+            DisableMaximizeButton();
+            SetWindowNoActivate();
+        }
 
-            // Disable the maximize button
+        private void DisableMaximizeButton()
+        {
+            WindowInteropHelper interopHelper = new WindowInteropHelper(this);
             int style = GetWindowLong(interopHelper.Handle, GWL_STYLE);
             SetWindowLong(interopHelper.Handle, GWL_STYLE, style & ~WS_MAXIMIZEBOX);
+        }
+
+        private void SetWindowNoActivate()
+        {
+            WindowInteropHelper interopHelper = new WindowInteropHelper(this);
 
             // Set WS_EX_NOACTIVATE - this will enable interaction with the window without grabbing focus
             int exStyle = GetWindowLong(interopHelper.Handle, GWL_EXSTYLE);
             SetWindowLong(interopHelper.Handle, GWL_EXSTYLE, exStyle | WS_EX_NOACTIVATE);
+        }
+
+        private void ResetWindowNoActivate()
+        {
+            WindowInteropHelper interopHelper = new WindowInteropHelper(this);
+            
+            // Reset WS_EX_NOACTIVATE - this will make the window normal
+            int exStyle = GetWindowLong(interopHelper.Handle, GWL_EXSTYLE);
+            SetWindowLong(interopHelper.Handle, GWL_EXSTYLE, exStyle & ~WS_EX_NOACTIVATE);
         }
     }
 }
