@@ -7,19 +7,36 @@
         mc:Ignorable="d"
         Topmost="True"
         SourceInitialized="Window_SourceInitialized"
-        Title="ClickType">
+        Title="ClickType"
+        Width="500" Height="150"
+        MinWidth="500" MinHeight="150"
+        ResizeMode="CanResizeWithGrip">
     <Window.DataContext>
         <local:ClickTypeViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListBox Name="SnippetsListBox" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Snippets}">
+        <TextBox Name="SnippetTextBox"
+                 Grid.Row="0" Grid.Column="0"
+                 MaxLines="1" TextWrapping="NoWrap" AcceptsReturn="False"
+                 GotKeyboardFocus="SnippetTextBox_GotFocus" LostKeyboardFocus="SnippetTextBox_LostFocus"/>
+
+
+        <Button Grid.Row="0" Grid.Column="1">Add</Button>
+        <Button Grid.Row="0" Grid.Column="2">Edit</Button>
+        <Button Grid.Row="0" Grid.Column="3">Delete</Button>
+
+        <ListBox Name="SnippetsListBox" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Snippets}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <EventSetter Event="MouseDoubleClick" Handler="SnippetsListBoxItem_MouseDoubleClick"/>

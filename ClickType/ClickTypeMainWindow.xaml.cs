@@ -79,5 +79,16 @@ namespace ClickType
             int exStyle = GetWindowLong(interopHelper.Handle, GWL_EXSTYLE);
             SetWindowLong(interopHelper.Handle, GWL_EXSTYLE, exStyle & ~WS_EX_NOACTIVATE);
         }
+
+        private void SnippetTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ResetWindowNoActivate();
+            GetWindow(this).Activate();
+        }
+
+        private void SnippetTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SetWindowNoActivate();
+        }
     }
 }
