@@ -25,6 +25,18 @@ namespace ClickType
             return snippets;
         }
 
+        public static void AddSnippet(string text)
+        {
+            if(string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
+            {
+                dbConnection.Query<Snippet>("insert into Snippet (SnippetText) values (\"" + text + "\");");
+            }
+        }
+
         private static string LoadConnectionString(string id="Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;

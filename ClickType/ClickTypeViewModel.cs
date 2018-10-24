@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ClickType
 {
@@ -25,8 +26,45 @@ namespace ClickType
             }
         }
 
+        private Snippet selectedSnippet;
+        public Snippet SelectedSnippet
+        {
+            get
+            {
+                return selectedSnippet;
+            }
+            set
+            {
+                selectedSnippet = value;
+                TypedText = selectedSnippet.ToString();
+            }
+        }
+
+        private string typedText;
+        public string TypedText
+        {
+            get
+            {
+                return typedText;
+            }
+            set
+            {
+                typedText = value;
+                RaisePropertyChanged("TypedText");
+            }
+        }
+
+        public ICommand AddSnippetCommand { get; private set; }
+
         public ClickTypeViewModel()
         {
+            AddSnippetCommand = new AddSnippetHandler(this);
+            Snippets = SnippetLoader.LoadSnippets();
+        }
+
+        public void AddSnippet()
+        {
+            SnippetLoader.AddSnippet(TypedText);
             Snippets = SnippetLoader.LoadSnippets();
         }
 
@@ -38,6 +76,39 @@ namespace ClickType
         protected void RaisePropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        class AddSnippetHandler : ICommand
+        {
+            private ClickTypeViewModel clickTypeViewModel;
+
+            public AddSnippetHandler(ClickTypeViewModel clickTypeViewModel)
+            {
+                this.clickTypeViewModel = clickTypeViewModel;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                string typedText = clickTypeViewModel.TypedText;
+                return (!string.IsNullOrEmpty(typedText) || !string.IsNullOrWhiteSpace(typedText));
+            }
+
+            public void Execute(object parameter)
+            {
+                clickTypeViewModel.AddSnippet();
+            }
+
+            // Solution from https://stackoverflow.com/a/42110060
+            public event EventHandler CanExecuteChanged
+            {
+                add { CommandManager.RequerySuggested += value; }
+                remove { CommandManager.RequerySuggested -= value; }
+            }
+
+            public void RaiseCanExecuteChanged()
+            {
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
     }
 }

@@ -29,14 +29,15 @@
         <TextBox Name="SnippetTextBox"
                  Grid.Row="0" Grid.Column="0"
                  MaxLines="1" TextWrapping="NoWrap" AcceptsReturn="False"
-                 GotKeyboardFocus="SnippetTextBox_GotFocus" LostKeyboardFocus="SnippetTextBox_LostFocus"/>
+                 GotKeyboardFocus="SnippetTextBox_GotFocus" LostKeyboardFocus="SnippetTextBox_LostFocus"
+                 Text="{Binding TypedText, UpdateSourceTrigger=PropertyChanged}"/>
 
 
-        <Button Grid.Row="0" Grid.Column="1">Add</Button>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding AddSnippetCommand}">Add</Button>
         <Button Grid.Row="0" Grid.Column="2">Edit</Button>
         <Button Grid.Row="0" Grid.Column="3">Delete</Button>
 
-        <ListBox Name="SnippetsListBox" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Snippets}">
+        <ListBox Name="SnippetsListBox" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Snippets}" SelectedValue="{Binding SelectedSnippet}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <EventSetter Event="MouseDoubleClick" Handler="SnippetsListBoxItem_MouseDoubleClick"/>
