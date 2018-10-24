@@ -8,7 +8,7 @@ namespace ClickType
 {
     class Snippet
     {
-        private readonly long id;
+        public readonly long id;
 
         public string SnippetText
         {

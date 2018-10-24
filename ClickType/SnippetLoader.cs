@@ -37,6 +37,14 @@ namespace ClickType
             }
         }
 
+        public static void DeleteSnippet(long snippetId)
+        {
+            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
+            {
+                dbConnection.Query<Snippet>("delete from Snippet where Id = " + snippetId);
+            }
+        }
+
         private static string LoadConnectionString(string id="Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;

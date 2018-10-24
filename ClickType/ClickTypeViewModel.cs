@@ -55,16 +55,24 @@ namespace ClickType
         }
 
         public ICommand AddSnippetCommand { get; private set; }
+        public ICommand DeleteSnippetCommand { get; private set; }
 
         public ClickTypeViewModel()
         {
             AddSnippetCommand = new AddSnippetHandler(this);
+            DeleteSnippetCommand = new DeleteSnippetHandler(this);
             Snippets = SnippetLoader.LoadSnippets();
         }
 
         public void AddSnippet()
         {
             SnippetLoader.AddSnippet(TypedText);
+            Snippets = SnippetLoader.LoadSnippets();
+        }
+
+        public void DeleteSelectedSnippet()
+        {
+            SnippetLoader.DeleteSnippet(SelectedSnippet.id);
             Snippets = SnippetLoader.LoadSnippets();
         }
 
@@ -99,6 +107,37 @@ namespace ClickType
             }
 
             // Solution from https://stackoverflow.com/a/42110060
+            public event EventHandler CanExecuteChanged
+            {
+                add { CommandManager.RequerySuggested += value; }
+                remove { CommandManager.RequerySuggested -= value; }
+            }
+
+            public void RaiseCanExecuteChanged()
+            {
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        class DeleteSnippetHandler : ICommand
+        {
+            private ClickTypeViewModel clickTypeViewModel;
+
+            public DeleteSnippetHandler(ClickTypeViewModel clickTypeViewModel)
+            {
+                this.clickTypeViewModel = clickTypeViewModel;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return clickTypeViewModel.SelectedSnippet != null;
+            }
+
+            public void Execute(object parameter)
+            {
+                clickTypeViewModel.DeleteSelectedSnippet();
+            }
+
             public event EventHandler CanExecuteChanged
             {
                 add { CommandManager.RequerySuggested += value; }
