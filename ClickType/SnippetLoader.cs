@@ -37,6 +37,18 @@ namespace ClickType
             }
         }
 
+        public static void EditSnippet(long id, string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
+            {
+                dbConnection.Query<Snippet>("update Snippet set SnippetText = \'" + text + "\' where Id = " + id);
+            }
+        }
+
         public static void DeleteSnippet(long snippetId)
         {
             using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))

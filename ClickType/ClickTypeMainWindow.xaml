@@ -34,7 +34,7 @@
 
 
         <Button Grid.Row="0" Grid.Column="1" Command="{Binding AddSnippetCommand}">Add</Button>
-        <Button Grid.Row="0" Grid.Column="2">Edit</Button>
+        <Button Grid.Row="0" Grid.Column="2" Command="{Binding EditSnippetCommand}">Edit</Button>
         <Button Grid.Row="0" Grid.Column="3" Command="{Binding DeleteSnippetCommand}">Delete</Button>
 
         <ListBox Name="SnippetsListBox" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Snippets}" SelectedValue="{Binding SelectedSnippet}">

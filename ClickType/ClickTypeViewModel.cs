@@ -55,11 +55,13 @@ namespace ClickType
         }
 
         public ICommand AddSnippetCommand { get; private set; }
+        public ICommand EditSnippetCommand { get; private set; }
         public ICommand DeleteSnippetCommand { get; private set; }
 
         public ClickTypeViewModel()
         {
             AddSnippetCommand = new AddSnippetHandler(this);
+            EditSnippetCommand = new EditSnippetHandler(this);
             DeleteSnippetCommand = new DeleteSnippetHandler(this);
             Snippets = SnippetLoader.LoadSnippets();
         }
@@ -67,6 +69,12 @@ namespace ClickType
         public void AddSnippet()
         {
             SnippetLoader.AddSnippet(TypedText);
+            Snippets = SnippetLoader.LoadSnippets();
+        }
+
+        public void EditSelectedSnippet()
+        {
+            SnippetLoader.EditSnippet(SelectedSnippet.id, TypedText);
             Snippets = SnippetLoader.LoadSnippets();
         }
 
@@ -107,6 +115,38 @@ namespace ClickType
             }
 
             // Solution from https://stackoverflow.com/a/42110060
+            public event EventHandler CanExecuteChanged
+            {
+                add { CommandManager.RequerySuggested += value; }
+                remove { CommandManager.RequerySuggested -= value; }
+            }
+
+            public void RaiseCanExecuteChanged()
+            {
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        class EditSnippetHandler : ICommand
+        {
+            private ClickTypeViewModel clickTypeViewModel;
+
+            public EditSnippetHandler(ClickTypeViewModel clickTypeViewModel)
+            {
+                this.clickTypeViewModel = clickTypeViewModel;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return clickTypeViewModel.SelectedSnippet != null &&
+                        !string.IsNullOrEmpty(clickTypeViewModel.TypedText);
+            }
+
+            public void Execute(object parameter)
+            {
+                clickTypeViewModel.EditSelectedSnippet();
+            }
+
             public event EventHandler CanExecuteChanged
             {
                 add { CommandManager.RequerySuggested += value; }
