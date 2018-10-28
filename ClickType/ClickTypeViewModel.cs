@@ -36,7 +36,7 @@ namespace ClickType
             set
             {
                 selectedSnippet = value;
-                TypedText = selectedSnippet.ToString();
+                TypedText = selectedSnippet?.ToString() ?? "";
             }
         }
 
@@ -70,6 +70,7 @@ namespace ClickType
         {
             SnippetLoader.AddSnippet(TypedText);
             Snippets = SnippetLoader.LoadSnippets();
+            TypedText = null; // Since adding a snippet with no prior selection does not clear this out
         }
 
         public void EditSelectedSnippet()
