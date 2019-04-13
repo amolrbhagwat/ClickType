@@ -12,15 +12,19 @@ namespace ClickType
 {
     class SnippetLoader
     {
+        private static IDbConnection dbConnection;
+
+        static SnippetLoader()
+        {
+            dbConnection = new SQLiteConnection(LoadConnectionString());
+        }
+
         public static List<Snippet> LoadSnippets()
         {
             List<Snippet> snippets;
 
-            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
-            {
-                var queryResults = dbConnection.Query<Snippet>("select * from Snippet", new DynamicParameters());
-                snippets = queryResults.ToList();
-            }
+            var queryResults = dbConnection.Query<Snippet>("select * from Snippet", new DynamicParameters());
+            snippets = queryResults.ToList();
 
             return snippets;
         }
@@ -31,10 +35,7 @@ namespace ClickType
             {
                 return;
             }
-            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
-            {
-                dbConnection.Query<Snippet>("insert into Snippet (SnippetText) values (\"" + text + "\");");
-            }
+            dbConnection.Query<Snippet>("insert into Snippet (SnippetText) values (\"" + text + "\");");
         }
 
         public static void EditSnippet(long id, string text)
@@ -43,18 +44,12 @@ namespace ClickType
             {
                 return;
             }
-            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
-            {
-                dbConnection.Query<Snippet>("update Snippet set SnippetText = \'" + text + "\' where Id = " + id);
-            }
+            dbConnection.Query<Snippet>("update Snippet set SnippetText = \'" + text + "\' where Id = " + id);
         }
 
         public static void DeleteSnippet(long snippetId)
         {
-            using (IDbConnection dbConnection = new SQLiteConnection(LoadConnectionString()))
-            {
-                dbConnection.Query<Snippet>("delete from Snippet where Id = " + snippetId);
-            }
+            dbConnection.Query<Snippet>("delete from Snippet where Id = " + snippetId);
         }
 
         private static string LoadConnectionString(string id="Default")
