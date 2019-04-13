@@ -23,7 +23,7 @@ namespace ClickType
         {
             List<Snippet> snippets;
 
-            var queryResults = dbConnection.Query<Snippet>("select * from Snippet", new DynamicParameters());
+            var queryResults = dbConnection.Query<Snippet>("select * from Snippet");
             snippets = queryResults.ToList();
 
             return snippets;
@@ -35,7 +35,12 @@ namespace ClickType
             {
                 return;
             }
-            dbConnection.Query<Snippet>("insert into Snippet (SnippetText) values (\"" + text + "\");");
+
+            string query = "insert into Snippet (SnippetText) values (@SnippetText);";
+            var parameters = new DynamicParameters();
+            parameters.Add("@SnippetText", text);
+
+            dbConnection.Query<Snippet>(query, parameters);
         }
 
         public static void EditSnippet(long id, string text)
@@ -44,7 +49,13 @@ namespace ClickType
             {
                 return;
             }
-            dbConnection.Query<Snippet>("update Snippet set SnippetText = \'" + text + "\' where Id = " + id);
+
+            string query = "update Snippet set SnippetText = (@SnippetText) where Id = (@Id);";
+            var parameters = new DynamicParameters();
+            parameters.Add("@SnippetText", text);
+            parameters.Add("@Id", id);
+
+            dbConnection.Query<Snippet>(query, parameters);
         }
 
         public static void DeleteSnippet(long snippetId)
